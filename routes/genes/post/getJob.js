@@ -1,6 +1,6 @@
 
 exports.expects = {
-  testArg: {type: 'integer',}
+  worker: {type: 'string'},
 }
 
 exports.requires = function($P) {
