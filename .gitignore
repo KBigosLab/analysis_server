@@ -1,7 +1,7 @@
 
 # node_modules folders
 node_modules/*
-!/node_modules/analysis/
+local/fusion
 
 includes/min/*
 

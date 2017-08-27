@@ -1,4 +1,7 @@
 
+// Add local modules
+require('app-module-path').addPath('local');
+
 // The basics
 var express = require('express');
 var fusion = require('fusion');
