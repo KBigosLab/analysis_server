@@ -30,6 +30,12 @@ exports.checkout = function(workerID) {
   return res;
 }
 
+exports.checkin = function(workerID,jobID) {
+  sql.query('LOCK TABLES worklist WRITE');
+  sql.query('UPDATE worklist SET Checkin=NOW() WHERE WorkerID=? AND JobID=?',arguments);
+  sql.query('UNLOCK TABLES');
+}
+
 exports.clearAllJobs = function() {
   sql.query('DELETE FROM worklist');
 }

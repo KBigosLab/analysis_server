@@ -20,10 +20,7 @@ exports.gzipAndPush = function(srcFilename,destFilename,options) {
   console.log('Uploading to '+destFilename);
   options.ContentType = options.ContentType || 'text/plain';
   options.ContentEncoding = 'gzip';
-  s3.put(Const.AWSBucket,path.join(shell.pwd,srcName+'.min'+ext+'.gz'),destFilename,{
-    'ContentType': 'text/javascript',
-    'ContentEncoding':'gzip'
-  });
+  s3.put(Const.AWSBucket,path.join(shell.pwd,srcName+'.min'+ext+'.gz'),destFilename,options);
 
   shell.run('rm ?',[srcName+'.min'+ext+'.gz']);
 }

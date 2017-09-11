@@ -1,5 +1,8 @@
 
 var db = require('analysis/db');
+var csv = require('fusion/csv');
+var path = require('path');
+var debugSource = require('analysis/sources/debug');
 
 exports.expects = {
   ip: {type: 'string', required: true},
@@ -12,12 +15,22 @@ exports.main = function($P) {
 
   var owner = 1;
   var job = db.worklist.checkout(owner);
-  var model = db.models.get(job.model);
+  if (job) {
+    var model = db.models.get(job.model);
 
-  $P.json({
-    model: model,
-    job: job,
-    regressors: [ [] ],
-  });
+    var subjects = csv.csv2json(path.join(Const.modelsDir,model.name,model.name+'.csv'));
+    var input = [];
+    for (var k in subjects) {
+      if (k == 0) continue;
+      input.push(subjects[k][0]);
+    }
+    var regressor = debugSource.getGenotypeMap(input);
+
+    $P.json({
+      model: model,
+      job: job,
+      regressor: regressor,
+    });
+  } else $P.json({});
 }
 
