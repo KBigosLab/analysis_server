@@ -2,8 +2,9 @@
 var db = require('analysis/db');
 
 exports.expects = {
-  workerID: {type: 'string', required: true},
-  jobID: {type: 'string', required: true},
+  workerID: {type: 'integer', required: true},
+  jobID: {type: 'integer', required: true},
+  summary: {type: 'object', required: true},
 }
 
 exports.requires = function($P) {
@@ -11,8 +12,8 @@ exports.requires = function($P) {
 
 exports.main = function($P) {
 
-  db.worklist.checkin($P.args.workerID,$P.args.jobID);
-  db.results.post($P.args.jobID,$P.args.data);
+  db.worklist.checkin($P.args.workerID,$P.args.jobID,JSON.stringify($P.args.summary));
+  db.workers.checkin($P.args.jobID);
 
   $P.json({});
 }

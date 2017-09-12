@@ -27,6 +27,7 @@ exports.main = function($P) {
     var regressor = debugSource.getGenotypeMap(input);
 
     $P.json({
+      workerID: owner,
       model: model,
       job: job,
       regressor: regressor,

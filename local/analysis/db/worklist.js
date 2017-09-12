@@ -3,7 +3,7 @@ var sql = require('fusion/sql');
 var moment = require('moment-timezone');
 
 exports.addJob = function(name,model) {
-  sql.query('INSERT INTO worklist(Name, Model) VALUES (:)',arguments);
+  sql.query('INSERT INTO worklist(Name, Model, Summary) VALUES (:)',[name,model,'']);
 }
 
 exports.checkout = function(workerID) {
@@ -30,9 +30,9 @@ exports.checkout = function(workerID) {
   return res;
 }
 
-exports.checkin = function(workerID,jobID) {
+exports.checkin = function(workerID,jobID,summary) {
   sql.query('LOCK TABLES worklist WRITE');
-  sql.query('UPDATE worklist SET Checkin=NOW() WHERE WorkerID=? AND JobID=?',arguments);
+  sql.query('UPDATE worklist SET Checkin=NOW(),Summary=:2 WHERE WorkerID=:0 AND JobID=:1',arguments);
   sql.query('UNLOCK TABLES');
 }
 
