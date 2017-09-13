@@ -40,3 +40,10 @@ exports.getResults = function(model) {
   return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=?',arguments);
 }
 
+exports.resetDeadJobs = function(model) {
+  var nullDate = '0000-00-00 00:00:00';
+  sql.query('LOCK TABLES worklist WRITE');
+  sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0 WHERE Model=:1 AND Checkin=:0 AND DATE_ADD(Checkout,INTERVAL 2 hour) < NOW()',[nullDate,model]);
+  sql.query('UNLOCK TABLES');
+}
+
