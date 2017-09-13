@@ -5,7 +5,7 @@ var path = require('path');
 var debugSource = require('analysis/sources/debug');
 
 exports.expects = {
-  ip: {type: 'string', required: true},
+  workerID: {type: 'integer', required: true},
 }
 
 exports.requires = function($P) {
@@ -13,7 +13,7 @@ exports.requires = function($P) {
 
 exports.main = function($P) {
 
-  var owner = 1;
+  var owner = $P.args.workerID;
   var job = db.worklist.checkout(owner);
   if (job) {
     var model = db.models.get(job.model);
@@ -27,7 +27,6 @@ exports.main = function($P) {
     var regressor = debugSource.getGenotypeMap(input);
 
     $P.json({
-      workerID: owner,
       model: model,
       job: job,
       regressor: regressor,
