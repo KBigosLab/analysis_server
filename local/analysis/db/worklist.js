@@ -36,7 +36,7 @@ exports.checkin = function(workerID,jobID,summary) {
   sql.query('UNLOCK TABLES');
 }
 
-exports.clearAllJobs = function() {
-  sql.query('DELETE FROM worklist');
+exports.getResults = function(model) {
+  return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=?',arguments);
 }
 
