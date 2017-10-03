@@ -15,7 +15,7 @@ var init = require('fusion/init')(function() {
   genotypes = JSON.parse(fs.readFile(path.join(Const.sourcesDir,'debug.json'),'utf8'));
 });
 
-exports.getGenotypeMap = function(input) {
+exports.getGenotypeMap = function(gene,input) {
   init();
 
   var output = {};

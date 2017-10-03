@@ -2,6 +2,7 @@
 var db = require('analysis/db');
 var csv = require('fusion/csv');
 var path = require('path');
+var debugSource = require('analysis/sources/debug');
 var origCatieSource = require('analysis/sources/origCatie');
 
 exports.expects = {
@@ -11,10 +12,9 @@ exports.expects = {
 exports.requires = function($P) {
 }
 
-exports.main = function($P) {
+exports.main = function() {
 
-  var owner = $P.args.workerID;
-  var job = db.worklist.checkout(owner);
+  var job = { jobID: 18, name: '1.19116294', model: 1 };
   if (job) {
     var model = db.models.get(job.model);
 
@@ -25,12 +25,7 @@ exports.main = function($P) {
       input.push(subjects[k][0]);
     }
     var regressor = origCatieSource.getGenotypeMap(job.name,input);
-
-    $P.json({
-      model: model,
-      job: job,
-      regressor: regressor,
-    });
-  } else $P.json({});
+    console.log(regressor);
+  }
 }
 
