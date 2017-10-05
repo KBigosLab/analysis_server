@@ -2,7 +2,8 @@
 var db = require('analysis/db');
 var csv = require('fusion/csv');
 var path = require('path');
-var origCatieSource = require('analysis/sources/origCatie');
+var origCatie = require('analysis/sources/origCatie');
+var catie2 = require('analysis/sources/catie2');
 
 exports.expects = {
   workerID: {type: 'integer', required: true},
@@ -19,12 +20,15 @@ exports.main = function($P) {
     var model = db.models.get(job.model);
 
     var subjects = csv.csv2json(path.join(Const.modelsDir,model.name,model.name+'.csv'));
-    var input = [];
+    var index = {};
     for (var k in subjects) {
       if (k == 0) continue;
-      input.push(subjects[k][0]);
+      index[subjects[k][0]] = true;
     }
-    var regressor = origCatieSource.getGenotypeMap(job.name,input);
+    var input = [];
+    for (var id in index) input.push(id);
+
+    var regressor = origCatie.getGenotypeMap(job.name,input);
 
     $P.json({
       model: model,
