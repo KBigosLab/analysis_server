@@ -5,6 +5,7 @@ var path = require('path');
 var _ = require('underscore');
 var FileStream = require('analysis/FileStream');
 
+var showDebugInfo = false;
 var dataFilename = 'GSA2016_125_025_21february2017';
 var filepath = path.join(Const.sourcesDir,'catie2',dataFilename);
 
@@ -36,6 +37,7 @@ function getGeneStats(genotypes) {
     }
   }
 
+  if (showDebugInfo) console.log(hist);
   delete hist.x;
 
   var alleles = _.map(hist,function(v,i) { return {allele: i, count: v} });
@@ -83,8 +85,13 @@ exports.getGenotypeMap = function(gene,input) {
   stream.close();
 
   var stats = getGeneStats(genotypes);
+  if (showDebugInfo) {
+    console.log(stats);
+    process.exit();
+  }
 
   var vector = getGeneVector(genotypes,stats);
+
   return vector;
 }
 

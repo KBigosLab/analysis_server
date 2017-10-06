@@ -28,7 +28,7 @@ exports.main = function($P) {
     var input = [];
     for (var id in index) input.push(id);
 
-    var regressor = origCatie.getGenotypeMap(job.name,input);
+    var regressor = catie2.getGenotypeMap(job.name,input);
 
     $P.json({
       model: model,
