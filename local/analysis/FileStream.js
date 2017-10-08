@@ -2,21 +2,21 @@
 var fs = require('fusion/fs');
 
 function FileStream(filename,flags) {
-  this.fd = fs.openSync(filename,'r');
-  this.size = fs.statSync(filename).size;
+  this.fd = fs.open(filename,'r');
+  this.size = fs.stat(filename).size;
   this.position = 0;
 }
 
 FileStream.prototype.readInt = function() {
   var buffer = new Buffer(4);
-  fs.readSync(this.fd,buffer,0,4,this.position);
+  fs.read(this.fd,buffer,0,4,this.position);
   this.position += 4;
   return buffer.readInt32LE(0);
 }
 
 FileStream.prototype.readByte = function() {
   var buffer = new Buffer(1);
-  fs.readSync(this.fd,buffer,0,1,this.position);
+  fs.read(this.fd,buffer,0,1,this.position);
   this.position++;
   return buffer.readInt8(0);
 }
@@ -27,7 +27,7 @@ FileStream.prototype.readNullTermStr = function() {
   var c = 1;
   while (c != 0) {
     if (c > 1) str += String.fromCharCode(c);
-    fs.readSync(this.fd,buffer,0,1,this.position);
+    fs.read(this.fd,buffer,0,1,this.position);
     this.position++;
     c = buffer.readInt8(0);
   }
@@ -40,7 +40,7 @@ FileStream.prototype.readToTab = function() {
   var c = 1;
   while (c != 9) {
     if (c > 1) str += String.fromCharCode(c);
-    fs.readSync(this.fd,buffer,0,1,this.position);
+    fs.read(this.fd,buffer,0,1,this.position);
     this.position++;
     c = buffer.readInt8(0);
   }
@@ -55,7 +55,7 @@ FileStream.prototype.readNewline = function() {
 
 FileStream.prototype.readGenotype = function() {
   var buffer = new Buffer(4);
-  fs.readSync(this.fd,buffer,0,4,this.position);
+  fs.read(this.fd,buffer,0,4,this.position);
   this.position += 4;
   return [String.fromCharCode(buffer.readInt8(0)), String.fromCharCode(buffer.readInt8(2))];
 }
