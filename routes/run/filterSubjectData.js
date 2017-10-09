@@ -17,17 +17,21 @@ function getSubjectIndex() {
 }
 
 exports.main = function() {
-  var mid = 3;
+  if (process.argv.length == 4) {
+    var modelName = process.argv[3];
 
-  var subjIndex = getSubjectIndex();
+    var model = db.models.getByName(modelName);
 
-  var model = db.models.get(mid);
-  var lines = fs.readFile(path.join(Const.modelsDir,model.name,model.name+'.csv'),'utf8').split('\n');
-  var res = [lines[0]];
-  for (var k=1;k<lines.length;k++) {
-    var row = lines[k].split(',');
-    if (subjIndex[row[0]]) res.push(lines[k]);
+    var subjIndex = getSubjectIndex();
+
+    var lines = fs.readFile(path.join(Const.modelsDir,model.name,model.name+'.csv'),'utf8').split('\n');
+    var res = [lines[0]];
+    for (var k=1;k<lines.length;k++) {
+      var row = lines[k].split(',');
+      if (subjIndex[row[0]]) res.push(lines[k]);
+    }
+    fs.writeFile(path.join(Const.modelsDir,model.name,model.name+'.csv.filtered'),res.join('\n'));
+    console.log('Wrote '+model.name+'.csv.filtered');
   }
-  fs.writeFile(path.join(Const.modelsDir,model.name,model.name+'.csv.filtered'),res.join('\n'));
 }
 

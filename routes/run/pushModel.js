@@ -14,6 +14,10 @@ function pushModel(name) {
 }
 
 exports.main = function() {
-  pushModel('Olanzapine');
+  if (process.argv.length == 4) {
+    var model = process.argv[3];
+
+    pushModel(model);
+  } else console.log('Usage: registerModel ModelName');
 }
 

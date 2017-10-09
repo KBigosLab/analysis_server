@@ -1,8 +1,8 @@
 
 var sql = require('fusion/sql');
 
-exports.add = function(model,name) {
-  sql.query('INSERT INTO models(Model, Name) VALUES (:)',arguments);
+exports.add = function(name,key) {
+  sql.query('INSERT INTO models(Name,`Key`) VALUES (:)',arguments);
 }
 
 exports.get = function(model) {
