@@ -6,6 +6,7 @@ exports.expects = {
 }
 
 exports.requires = function($P) {
+  $P.require.auth();
 }
 
 exports.main = function($P) {
