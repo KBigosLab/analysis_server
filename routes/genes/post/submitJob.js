@@ -14,7 +14,7 @@ exports.requires = function($P) {
 exports.main = function($P) {
 
   db.worklist.checkin($P.args.workerID,$P.args.jobID,JSON.stringify($P.args.summary));
-  db.workers.checkin($P.args.jobID);
+  db.workers.checkin($P.args.workerID);
 
   $P.json({});
 }
