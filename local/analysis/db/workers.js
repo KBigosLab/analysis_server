@@ -2,9 +2,10 @@
 var sql = require('fusion/sql');
 
 exports.registerWorker = function(ip,id) {
+  id = id || '';
   var worker = sql.get('SELECT * FROM workers WHERE IP=?',arguments);
   if (!worker) {
-    var res = sql.query('INSERT INTO workers(IP,ID) VALUES (:)',arguments);
+    var res = sql.query('INSERT INTO workers(IP,ID) VALUES (:)',[ip,id]);
     return res.insertId;
   } else return worker.workerID;
 }
