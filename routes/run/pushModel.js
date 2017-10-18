@@ -3,7 +3,7 @@ var db = require('analysis/db');
 var path = require('path');
 var s3 = require('analysis/s3');
 
-var modelFiles = ['Fields.txt','%.csv','%.fit.txt','%_0.ctl','%_1.ctl','%.base.txt'];
+var modelFiles = ['%.csv','%.fit.txt','%_0.ctl','%_1.ctl','%.base.txt'];
 
 function pushModel(name) {
   var model = db.models.getByName(name);
