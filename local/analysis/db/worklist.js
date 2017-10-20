@@ -37,7 +37,7 @@ exports.checkin = function(workerID,jobID,summary) {
 }
 
 exports.getResults = function(model) {
-  return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=?',arguments);
+  return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=? AND Summary!=?',[model,'']);
 }
 
 exports.resetDeadJobs = function(model) {

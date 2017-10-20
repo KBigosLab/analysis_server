@@ -1,43 +1,18 @@
 
 var db = require('analysis/db');
-var fs = require('fusion/fs');
-
-function createSchema(output,summary) {
-  var row = ['id','name'];
-
-  for (var key in summary)
-    row.push(key);
-
-  output.csv = row.join(',')+'\n';
-
-  return row;
-}
+var results = require('analysis/results');
 
 exports.main = function() {
-  var model = 1;
+  if (process.argv.length == 4) {
+    var modelName = process.argv[3];
 
-  var output = {csv: ''};
-  var res = db.worklist.getResults(model);
-  var schema = null;
-  for (var k in res) {
-    try {
-      var summary = JSON.parse(res[k].summary);
-      if (!schema) schema = createSchema(output,summary);
+    var model = db.models.getByName(modelName);
+    if (model) {
+      results.writeCSV(model.model);
+      results.pushCSV(model.model);
+    } else console.log('Could not find model '+model);
 
-      summary.id = res[k].jobID;
-      summary.name = res[k].name;
+  } else console.log('Usage: results2csv ModelName');
 
-      var row = [];
-      for (var k in schema) {
-        row.push(summary[schema[k]]);
-      }
-
-      output.csv += row.join(',')+'\n';
-    } catch(e) {
-
-    }
-  }
-
-  fs.writeFile(rootDir+'output.csv',output.csv);
 }
 
