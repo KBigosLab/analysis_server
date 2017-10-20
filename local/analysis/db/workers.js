@@ -1,6 +1,10 @@
 
 var sql = require('fusion/sql');
 
+exports.getWorkers = function() {
+  return sql.query('SELECT * FROM workers');
+}
+
 exports.registerWorker = function(ip,id) {
   id = id || '';
   var worker = sql.get('SELECT * FROM workers WHERE IP=? AND ID=?',arguments);
