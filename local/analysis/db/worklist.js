@@ -31,9 +31,11 @@ exports.checkout = function(workerID) {
 }
 
 exports.checkin = function(workerID,jobID,summary) {
-  sql.query('LOCK TABLES worklist WRITE');
-  sql.query('UPDATE worklist SET Checkin=NOW(),Summary=:2 WHERE WorkerID=:0 AND JobID=:1',arguments);
-  sql.query('UNLOCK TABLES');
+  sql.fork(function(sql) {
+    sql.query('LOCK TABLES worklist WRITE');
+    sql.query('UPDATE worklist SET Checkin=NOW(),Summary=:2 WHERE WorkerID=:0 AND JobID=:1',[workerID,jobID,summary]);
+    sql.query('UNLOCK TABLES');
+  });
 }
 
 exports.getResults = function(model) {
@@ -46,8 +48,10 @@ exports.getRecentJobs = function() {
 
 exports.resetDeadJobs = function(model) {
   var nullDate = '0000-00-00 00:00:00';
-  sql.query('LOCK TABLES worklist WRITE');
-  sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0 WHERE Model=:1 AND Checkin=:0 AND DATE_ADD(Checkout,INTERVAL 2 hour) < NOW()',[nullDate,model]);
-  sql.query('UNLOCK TABLES');
+  sql.fork(function(sql) {
+    sql.query('LOCK TABLES worklist WRITE');
+    sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0,Checkin=:0 WHERE Summary=:1 AND DATE_ADD(Checkout,INTERVAL 2 hour) < NOW()',[nullDate,'']);
+    sql.query('UNLOCK TABLES');
+  });
 }
 
