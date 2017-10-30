@@ -50,7 +50,7 @@ exports.resetDeadJobs = function(model) {
   var nullDate = '0000-00-00 00:00:00';
   sql.fork(function(sql) {
     sql.query('LOCK TABLES worklist WRITE');
-    sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0 WHERE Model=:1 AND Checkin=:0 AND DATE_ADD(Checkout,INTERVAL 2 hour) < NOW()',[nullDate,model]);
+    sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0,Checkin=:0 WHERE Summary=:1 AND DATE_ADD(Checkout,INTERVAL 2 hour) < NOW()',[nullDate,'']);
     sql.query('UNLOCK TABLES');
   });
 }
