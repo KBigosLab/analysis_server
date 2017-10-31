@@ -38,8 +38,8 @@ function getHistogram(regressor) {
 
 exports.main = function() {
 
-  var startAt = 1;
-  var chunkSize = 100000;
+  var startAt = process.argv[3];
+  var chunkSize = 50000;
 
   var input_full = getFullSubjectList();
 
