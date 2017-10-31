@@ -25,6 +25,7 @@ var init = require('fusion/init')(function() {
 });
 
 function getGeneStats(genotypes) {
+  var typeIndex = {};
   var hist = {'x': 0};
 
   for (var k in genotypes) {
@@ -34,6 +35,9 @@ function getGeneStats(genotypes) {
         if (!(gt[0] in hist)) hist[gt[0]] = 1
         else hist[gt[0]]++;
       } else hist.x++;
+
+      typeIndex[gt[0]] = true;
+      typeIndex[gt[1]] = true;
     }
   }
 
@@ -41,19 +45,23 @@ function getGeneStats(genotypes) {
   delete hist.x;
 
   var alleles = _.map(hist,function(v,i) { return {allele: i, count: v} });
+  var types = _.map(typeIndex,function(v,i) { return i });
 
   if (alleles.length == 2) {
     if (alleles[0].count > alleles[1].count) return {major: alleles[0].allele, minor: alleles[1].allele}
     else return {major: alleles[1].allele, minor: alleles[0].allele};
   } else if (alleles.length == 1) return {major: alleles[0].allele}
-  else throw new Error('Unexpected allele count');
+  else if (alleles.length == 0) return {major: types[0]}
+  else {
+    throw new Error('Unexpected allele count');
+  }
 }
 
 function getGeneVector(genotypes,stats) {
   var res = {};
   for (var subj in genotypes) {
     var gt = genotypes[subj];
-    if (gt[0] == 0) res[subj] = -1
+    if (gt[0] == 0 || gt[1] == 0) res[subj] = -1
     else if (gt[0] == gt[1]) {
       if (gt[0] == stats.major) res[subj] = 0
       else if (gt[0] == stats.minor) res[subj] = 2
@@ -91,7 +99,6 @@ exports.getGenotypeMap = function(gene,input) {
   }
 
   var vector = getGeneVector(genotypes,stats);
-
   return vector;
 }
 
