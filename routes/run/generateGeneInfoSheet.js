@@ -38,7 +38,7 @@ function getHistogram(regressor) {
 
 exports.main = function() {
 
-  var startAt = process.argv[3];
+  var startAt = +process.argv[3];
   var chunkSize = 50000;
 
   var input_full = getFullSubjectList();
@@ -51,15 +51,11 @@ exports.main = function() {
 
   var geneList = fs.readFile(filepath+'.genes','utf8').split('\n');
 
-  var output = fs.readFile(filepath+'.hist','utf8');
+  var output = '';
 
-  for (var k=startAt*chunkSize;k<(startAt+1)*chunkSize;k++) {
+  for (var k=startAt*chunkSize;k<geneList.length/*k<(startAt+1)*chunkSize*/;k++) {
     var row = [];
     row.push(geneList[k]);
-
-    var counts = getHistogram(catie2.getGenotypeMap(geneList[k],input_full));
-    row.push(counts[0]); row.push(counts[1]); row.push(counts[2]);
-    row.push('');
 
     var counts = getHistogram(catie2.getGenotypeMap(geneList[k],input_CAUC));
     row.push(counts[0]); row.push(counts[1]); row.push(counts[2]);
@@ -71,8 +67,8 @@ exports.main = function() {
     output += row.join(',')+'\n';
     console.log(+k);
 
-    if (k > 100 && k % 1000 == 0) sleep(5000);
+    if (k > 100 && k % 1000 == 0) sleep(1500);
   }
-  fs.writeFile(filepath+'.hist',output);
+  fs.writeFile(filepath+'.hist.'+startAt,output);
 }
 

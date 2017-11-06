@@ -6,6 +6,10 @@ exports.addJob = function(name,model) {
   sql.query('INSERT INTO worklist(Name, Model, Summary) VALUES (:)',[name,model,'']);
 }
 
+exports.removeJob = function(name,model) {
+  sql.query('DELETE FROM worklist WHERE Name=? AND Model=? LIMIT 1',arguments);
+}
+
 exports.checkout = function(workerID) {
   var self = this;
   var nullDate = '0000-00-00 00:00:00';
