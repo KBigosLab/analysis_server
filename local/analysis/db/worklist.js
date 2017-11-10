@@ -46,8 +46,17 @@ exports.getResults = function(model) {
   return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=? AND Summary!=?',[model,'']);
 }
 
+exports.getEntireWorklist = function(model) {
+  return sql.query('SELECT JobID,Name,Summary FROM worklist WHERE Model=?',[model,'']);
+}
+
 exports.getRecentJobs = function() {
   return sql.query('SELECT JobID,WorkerID,Checkin FROM worklist WHERE Checkin>DATE_SUB(NOW(), INTERVAL 5 hour)',[]);
+}
+
+exports.resetDeadJob = function(jobID) {
+  var nullDate = '0000-00-00 00:00:00';
+  sql.query('UPDATE worklist SET WorkerID=0,Checkout=:0,Checkin=:0,Summary=:1 WHERE JobID=:2 LIMIT 1',[nullDate,'',jobID]);
 }
 
 exports.resetDeadJobs = function(model) {
