@@ -1,10 +1,8 @@
 # analysis_server
 Server for managing analysis checkouts and data uploads
 
-## Creating a new model
+## Scheduling an analysis
 ```
-node run registerModel modelName
-node run filterSubjectData modelName
-node run pushModel modelName
+scheduleAnalysis modelID CohortName
 ```
-After `filterSubjectData` runs, the `modelName.csv` file needs to be replaced by `modelName.csv.filtered`. The `.fit.txt` file should be inspected for the post hoc analysis. The base model needs to be updated after the initial push but before the actual live analysis runs.
+This should be run *after* running `node run import` on a client instance to import a new model. `modelID` is the numeric ID of the model and `CohortName` is `CAUC` or `AA`.
