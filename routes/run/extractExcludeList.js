@@ -23,7 +23,7 @@ function printMAF(row,offset) {
 }
 
 exports.main = function() {
-  var rows = csv.csv2json(filepath+'.hist');
+  var rows = csv.csv2json(filepath+'.zipra.hist');
 
   var cauc = {};
   var aa = {};
@@ -34,7 +34,12 @@ exports.main = function() {
     if (calcMAF(rows[k],5) < 0.05) aa[name] = printMAF(rows[k],5);
   }
 
-  fs.writeFile(filepath+'_CAUC.exclude',JSON.stringify(_.map(cauc,function(v,i) { return i })));
-  fs.writeFile(filepath+'_AA.exclude',JSON.stringify(_.map(aa,function(v,i) { return i })));
+  var caucExclude = _.map(cauc,function(v,i) { return i });
+  fs.writeFile(filepath+'_CAUC.exclude',JSON.stringify(caucExclude));
+
+  var aaExclude = _.map(aa,function(v,i) { return i });
+  fs.writeFile(filepath+'_AA.exclude',JSON.stringify(aaExclude));
+
+  console.log('Excluded: '+caucExclude.length+'  '+aaExclude.length+'  of '+rows.length);
 }
 

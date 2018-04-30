@@ -43,10 +43,10 @@ exports.main = function() {
 
   var input_full = getFullSubjectList();
 
-  var model = db.models.get(8);
+  var model = db.models.get(13);
   var input_CAUC = getSubjectsForModel(model);
 
-  var model = db.models.get(9);
+  var model = db.models.get(14);
   var input_AA = getSubjectsForModel(model);
 
   var geneList = fs.readFile(filepath+'.genes','utf8').split('\n');
