@@ -6,7 +6,7 @@ var prompt = require('analysis/prompt');
 var path = require('path');
 
 function createSchema(output,summary) {
-  var row = ['id','name'];
+  var row = ['id','name','SMR','FIT'];
 
   for (var key in summary)
     row.push(key);
@@ -32,6 +32,8 @@ exports.writeCSV = function(modelID) {
 
       summary.id = res[k].jobID;
       summary.name = res[k].name;
+      summary.SMR = 'https://kb-nonmem-data.s3.amazonaws.com/'+model.key+'/results/'+res[k].jobID+'/nonmem.smr';
+      summary.FIT = 'https://kb-nonmem-data.s3.amazonaws.com/'+model.key+'/results/'+res[k].jobID+'/nonmem.fit';
 
       if (!summary.Error) summary.Error = 0;
 
