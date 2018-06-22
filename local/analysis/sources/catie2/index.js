@@ -71,6 +71,17 @@ function getGeneVector(genotypes,stats) {
   return res;
 }
 
+function convertSubjID(id) {
+  var str = ''+id;
+  if (+id < 3000) {
+    if (str[0] == '1') {
+      return 'P'+str.slice(1,str.length);
+    } else if (str[0] == '2') {
+      return 'Y'+str.slice(1,str.length);
+    } else return id;
+  } else return id;
+}
+
 exports.getGenotypeMap = function(gene,input) {
   init();
 
@@ -81,11 +92,11 @@ exports.getGenotypeMap = function(gene,input) {
   var genotypes = {};
   var startTime = new Date();
   for (var k in input) {
-    var subjID = input[k];
+    var subjID = convertSubjID(input[k]);
     var loc = subjectMap[subjID];
     if (loc) {
       stream.position = +loc+8+genePos*4;
-      genotypes[subjID] = stream.readGenotype();
+      genotypes[input[k]] = stream.readGenotype();
     }
   }
   var stopTime = new Date();
